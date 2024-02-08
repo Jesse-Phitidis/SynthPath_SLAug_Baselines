@@ -1,3 +1,4 @@
+import torch
 import torch.nn as nn
 from monai.losses import DiceLoss
 
@@ -9,6 +10,12 @@ class SetCriterion(nn.Module):
         self.weight_dict={'ce_loss':1, 'dice_loss':1}
 
     def get_loss(self,  pred, gt):
+        
+        # Remove channels except 0 and 19 so we now do softmax over background and stroke
+        pred = pred[:, (0,19), ...]
+        # Remove gt labels for anatomy and keep only stroke
+        gt = torch.where(gt==19, 1, 0)
+        
         if len(gt.size())==4 and gt.size(1)==1:
             gt=gt[:,0]
 

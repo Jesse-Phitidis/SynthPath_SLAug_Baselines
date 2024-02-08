@@ -206,6 +206,12 @@ def evaluate(model: torch.nn.Module, data_loader: Iterable, device: torch.device
         img = samples['images']
         lbl = samples['labels']
         logits = model(img)
+        
+        # Remove channels except 0 and 19 so we now do softmax over background and stroke
+        logits = logits[:, (0,19), ...]
+        # Remove gt labels for anatomy and keep only stroke
+        lbl = torch.where(lbl==19, 1, 0)
+        
         num_classes=logits.size(1)
         pred=torch.argmax(logits,dim=1)
         one_hot_pred=convert_to_one_hot(pred,num_classes)

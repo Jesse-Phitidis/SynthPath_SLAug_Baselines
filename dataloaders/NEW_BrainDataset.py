@@ -11,9 +11,14 @@ from functools import partial
 from .location_scale_augmentation import LocationScaleAugmentation
 hostname = platform.node()
 # folder for datasets
-BASEDIR = '/home/jesse/BRICIA/MVH_JPhitidis_PhD/canon_placement_y2/jan2024/data/jan2024new'
+BASEDIR = '/home/jessephitidis/BRICIA/MVH_JPhitidis_PhD/canon_placement_y2/jan2024/data/jan2024new'
 print(f'Running on machine {hostname}, using dataset from {BASEDIR}')
-LABEL_NAME = ["bg", "stroke"]
+LABEL_NAME = [
+    'background', 'cerebral_white_matter', 'cerebral_cortex', 'lateral_ventricle', 
+    'inferior_lateral_ventricle', 'cerebellum_white_matter', 'cerebellum_cortex', 
+    'thalamus', 'caudate', 'putamen', 'pallidum', 'third_ventricle', 'fourth_ventricle', 
+    'brain_stem', 'hippocampus', 'amygdala', 'csf', 'accumbens_area', 'ventral_dc', 'stroke'
+    ]
 from dataloaders.niftiio import read_nii_bysitk
 
 class mean_std_norm(object):
@@ -168,8 +173,11 @@ class BrainDataset(torch_data.Dataset):
                 else:
                     vol_info = {'vol_vmin': img.min(), 'vol_vmax': img.max(), 'vol_mean': img.mean(), 'vol_std': img.std()}
                 img = self.normalize_op(img)
-
-                lb = nio.read_nii_bysitk(itm["lbs_fid"])
+                
+                lb_path = nio.read_nii_bysitk(itm["lbs_fid"])
+                lb_anat = nio.read_nii_bysitk(itm["lbs_fid"].replace("labels_pathology", "labels_anatomy"))
+                lb_anat[lb_path>0] = 19
+                lb = lb_anat
                 lb = np.float32(lb)
 
                 img     = np.transpose(img, (1,2,0))
