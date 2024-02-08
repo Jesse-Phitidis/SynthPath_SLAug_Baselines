@@ -235,14 +235,14 @@ if __name__ == "__main__":
             scheduler.step()
 
         # Save Bset model on val
-        if (cur_epoch+1)%100==0:
+        if (cur_epoch+1)%2==0:
             cur_dice = evaluate(model, val_loader, torch.device('cuda'))
             if np.mean(cur_dice)>best_dice:
                 best_dice=np.mean(cur_dice)
                 for f in os.listdir(ckptdir):
                     if 'val' in f:
                         os.remove(os.path.join(ckptdir,f))
-                torch.save({'model': model.state_dict()}, os.path.join(ckptdir,f'val_best_epoch_{cur_epoch}.pth'))
+                torch.save({'model': model.state_dict()}, os.path.join(ckptdir,f'val_best_epoch_{cur_epoch}_dice_{cur_dice:.3f}.pth'))
 
             str=f'Epoch [{cur_epoch}]   '
             for i,d in enumerate(cur_dice):
@@ -251,7 +251,7 @@ if __name__ == "__main__":
             print(str)
 
         # Save latest model
-        if (cur_epoch+1)%50==0:
+        if (cur_epoch+1)%2==0:
             torch.save({'model': model.state_dict()}, os.path.join(ckptdir,'latest.pth'))
 
         if cur_iter >= optimizer_config.max_iter and optimizer_config.max_iter>0:
