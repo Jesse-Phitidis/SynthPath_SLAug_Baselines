@@ -132,6 +132,10 @@ if __name__ == "__main__":
     sys.path.append(os.getcwd())
     parser = get_parser()
     opt, unknown = parser.parse_known_args()
+    
+    # opt.seed = 23
+    # opt.base = ["/home/jessephitidis/projects/SynthPath_SLAug_Baselines/configs/NEW_efficientUnet_T1_to_DWI.yaml"]
+    
     seed=seed_everything(opt.seed)
     if opt.resume:
         if not os.path.exists(opt.resume):
@@ -242,7 +246,7 @@ if __name__ == "__main__":
                 for f in os.listdir(ckptdir):
                     if 'val' in f:
                         os.remove(os.path.join(ckptdir,f))
-                torch.save({'model': model.state_dict()}, os.path.join(ckptdir,f'val_best_epoch_{cur_epoch}_dice_{cur_dice:.3f}.pth'))
+                torch.save({'model': model.state_dict()}, os.path.join(ckptdir,f'val_best_epoch_{cur_epoch}.pth'))
 
             str=f'Epoch [{cur_epoch}]   '
             for i,d in enumerate(cur_dice):
