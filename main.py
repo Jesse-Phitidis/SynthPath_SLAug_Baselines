@@ -242,7 +242,7 @@ if __name__ == "__main__":
                 for f in os.listdir(ckptdir):
                     if 'val' in f:
                         os.remove(os.path.join(ckptdir,f))
-                torch.save({'model': model.state_dict()}, os.path.join(ckptdir,f'val_best_epoch_{cur_epoch}_dice_{cur_dice:.3f}.pth'))
+                torch.save({'model': model.state_dict()}, os.path.join(ckptdir,f'val_best_epoch_{cur_epoch}'))
 
             str=f'Epoch [{cur_epoch}]   '
             for i,d in enumerate(cur_dice):
