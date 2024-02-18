@@ -18,7 +18,7 @@ optimizer:
 
 saliency_balancing_fusion:
   usage: true
-  grid_size: 8
+  grid_size: 18
 
 data:
   target: main.DataModuleFromConfig
