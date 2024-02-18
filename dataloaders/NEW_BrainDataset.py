@@ -13,7 +13,12 @@ hostname = platform.node()
 # folder for datasets
 BASEDIR = '/home/jesse/BRICIA/MVH_JPhitidis_PhD/canon_placement_y2/jan2024/data/jan2024new'
 print(f'Running on machine {hostname}, using dataset from {BASEDIR}')
-LABEL_NAME = ["bg", "stroke"]
+LABEL_NAME = [
+    'background', 'cerebral_white_matter', 'cerebral_cortex', 'lateral_ventricle', 
+    'inferior_lateral_ventricle', 'cerebellum_white_matter', 'cerebellum_cortex', 
+    'thalamus', 'caudate', 'putamen', 'pallidum', 'third_ventricle', 'fourth_ventricle', 
+    'brain_stem', 'hippocampus', 'amygdala', 'csf', 'accumbens_area', 'ventral_dc'
+    ]
 from dataloaders.niftiio import read_nii_bysitk
 
 class mean_std_norm(object):
@@ -132,7 +137,7 @@ class BrainDataset(torch_data.Dataset):
             raise ValueError(f"domain must be in 't1', 'dwi', 'flair' but was {self.domains[0]}")
         
         base_subdir_images = os.path.join(self._base_dir, self.phase, folder)
-        base_subdir_labels = os.path.join(self._base_dir, self.phase, "labels_pathology")
+        base_subdir_labels = os.path.join(self._base_dir, self.phase, "labels_anatomy")
         for file in sorted(os.listdir(base_subdir_images)):
             curr_dict = {}
             
