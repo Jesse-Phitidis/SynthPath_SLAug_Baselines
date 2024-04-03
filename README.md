@@ -1,3 +1,6 @@
+### FORKED REPOSITORY USED AS A BASELINE IN:
+https://github.com/Jesse-Phitidis/SynthPathCode
+
 # SLAug
 
 ## Rethinking Data Augmentation for Single-source Domain Generalization in Medical Image Segmentation, AAAI 2023. [ArXiv](https://arxiv.org/pdf/2211.14805.pdf)
